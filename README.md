@@ -1,6 +1,6 @@
 # DataIntegration
 
-## build and run app
+## build and run app backend
 
 $ docker-compose build
 
