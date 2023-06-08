@@ -9,5 +9,5 @@ application = get_celery()
 
 @application.task(bind=True)
 def run_session(self, session_id):
-    print("run_session")
+    print("test session")
     return "run_session"
