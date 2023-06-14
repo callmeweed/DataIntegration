@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     """
     Settings for the smart parking
     """
-    list_webpage = [""]
+    list_webpage = ["batdongsanvn"]
     port:int=8000
     host:str="0.0.0.0"
     redis_ip ="172.17.0.1"
