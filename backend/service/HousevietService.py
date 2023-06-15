@@ -7,16 +7,16 @@ from unidecode import unidecode
 import re
 import logging
 
-class BatdongsanvnService(BaseService):
+class HousevietService(BaseService):
     def __init__(self, ):
         super(BatdongsanvnService, self).__init__()
 
     def rewriteQuery(self,req:RequestSearch)-> str:
         url = None
         if req.type == "Sell":
-            type = "ban-nha-dat"
+            type = "nha-dat-ban"
         elif req.type == "Lease":
-            type = "cho-thue-nha-dat"
+            type = "nha-dat-cho-thue"
 
         if req.city == "Hanoi":
             city = "ha-noi"
@@ -25,7 +25,7 @@ class BatdongsanvnService(BaseService):
             else:
                 district = str(req.district).lower().strip()
                 normalized_district = unidecode(district).strip().replace(" ", "-")
-                url = f"https://batdongsan.vn/{type}-{normalized_district}"
+                url = f"https://batdongsan.vn/{type}-{city}-{normalized_district}"
         elif req.city == "HCM":
             city = "ho-chi-minh"
             if req.district == "All":
@@ -33,15 +33,13 @@ class BatdongsanvnService(BaseService):
             else:
                 district = str(req.district).lower().strip()
                 normalized_district = unidecode(district).strip().replace(" ", "-")
-                url = f"https://batdongsan.vn/{type}-{normalized_district}"
+                url = f"https://batdongsan.vn/{type}-{city}-{normalized_district}"
 
         if req.area != "All":
             area = str(req.area).lower().strip()
             normalized_area = unidecode(area).strip()
             normalized_area = re.sub(r'[^a-zA-Z0-9]+', '-', normalized_area.lower())
-            url = f"{url}-dien-tich-{normalized_area}"
-            # Từ 80 - 100m2
-            #-dien-tich-tu-30-m2-den-50-m2
+            url = f"{url}-{normalized_area}"
         else:
             pass
 
