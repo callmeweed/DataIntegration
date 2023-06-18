@@ -13,41 +13,35 @@ class BatdongsanvnService(BaseService):
 
     def rewriteQuery(self,req:RequestSearch)-> str:
         url = None
+        _type = ""
+        city = ""
         if req.type == "Sell":
-            type = "ban-nha-dat"
+            _type = "ban-nha-dat"
         elif req.type == "Lease":
-            type = "cho-thue-nha-dat"
+            _type = "cho-thue-nha-dat"
 
         if req.city == "Hanoi":
             city = "ha-noi"
-            if req.district == "All":
-                url = f"https://batdongsan.vn/{type}-{city}"
-            else:
-                district = str(req.district).lower().strip()
-                normalized_district = unidecode(district).strip().replace(" ", "-")
-                url = f"https://batdongsan.vn/{type}-{city}-{normalized_district}"
         elif req.city == "HCM":
             city = "ho-chi-minh"
-            if req.district == "All":
-                url = f"https://batdongsan.vn/{type}-{city}"
-            else:
-                district = str(req.district).lower().strip()
-                normalized_district = unidecode(district).strip().replace(" ", "-")
-                url = f"https://batdongsan.vn/{type}-{city}-{normalized_district}"
+
+        if req.district == "All":
+            url = f"https://batdongsan.vn/{_type}-{city}"
+        else:
+            district = str(req.district).lower().strip()
+            normalized_district = unidecode(district).strip().replace(" ", "-")
+            url = f"https://batdongsan.vn/{_type}-{normalized_district}-{city}"
 
         if req.area != "All":
             area = str(req.area).lower().strip()
             normalized_area = unidecode(area).strip()
             normalized_area = re.sub(r'[^a-zA-Z0-9]+', '-', normalized_area.lower())
             url = f"{url}-{normalized_area}"
-        else:
-            pass
-
-
-
+            # Từ 80 - 100m2
+            #-tu-30-50-m2
 
         if req.page > 1 and url != None:
-            url += "/p/" + str(req.page)
+            url += "/p" + str(req.page)
         print("url", url)
         return url
 
@@ -67,8 +61,8 @@ class BatdongsanvnService(BaseService):
                 date = record.find("div", class_='meta footer').find("span").find("time")
                 date = date.contents[0]
 
-                thumbnail = record.find("div", class_='image cover').find("a")
-                thumbnail = thumbnail.get("href")
+                thumbnail = record.find("div", class_='image cover').find("a").find("img")
+                thumbnail = thumbnail.get("src")
 
                 area = record.find("span", class_='acreage')
                 if area is not None:
@@ -89,40 +83,59 @@ class BatdongsanvnService(BaseService):
 
     async def process(self, req: RequestSearch):
         results = []
-        if req.text is None or req.text == "":
-
+        # if req.text is None or req.text == "":
+        while True:
             url = self.rewriteQuery(req)
             if url == None:
                 return results
+
             soup = await self.asyncDoQuery(url)
             if soup == None:
                 raise HTTPException(404, "Not found, try again later")
-            results = self.parser_html(soup)
-            return results
-        else:
-            candidates = []
-            page = req.page
-            list_soup = []
-            for i in range((page - 1) * 5, page * 5):
-                if i == 0: continue
-                req.page = i
-                url = self.rewriteQuery(req)
-                if url == None:
-                    continue
-                fut = self.asyncDoQuery(url)
-                list_soup.append(fut)
-            temps = await asyncio.gather(*list_soup)
 
-            for temp in temps:
+            condition = soup.select('div.uk-panel > p')
+            if condition != []:
+                return results
 
-                if temp == None:
-                    continue
-                else:
-                    candidates.append(temp)
-            for x in candidates:
-                # print(type(x))
-                results += self.parser_html(x)
-            # candidates = [ for x in candidates]
-            results = self.filterQuery(req.text, results)
+            result = self.parser_html(soup)
+            for i in result:
+                results.append(i)
 
-            return results
+            req.page += 1
+        return results
+
+            # url = self.rewriteQuery(req)
+            # if url == None:
+            #     return results
+            # soup = await self.asyncDoQuery(url)
+            # if soup == None:
+            #     raise HTTPException(404, "Not found, try again later")
+            # results = self.parser_html(soup)
+            # return results
+        # else:
+        #     candidates = []
+        #     page = req.page
+        #     list_soup = []
+        #     for i in range((page - 1) * 5, page * 5):
+        #         if i == 0: continue
+        #         req.page = i
+        #         url = self.rewriteQuery(req)
+        #         if url == None:
+        #             continue
+        #         fut = self.asyncDoQuery(url)
+        #         list_soup.append(fut)
+        #     temps = await asyncio.gather(*list_soup)
+        #
+        #     for temp in temps:
+        #
+        #         if temp == None:
+        #             continue
+        #         else:
+        #             candidates.append(temp)
+        #     for x in candidates:
+        #         # print(type(x))
+        #         results += self.parser_html(x)
+        #     # candidates = [ for x in candidates]
+        #     results = self.filterQuery(req.text, results)
+        #
+        #     return results
