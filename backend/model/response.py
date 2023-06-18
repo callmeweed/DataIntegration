@@ -6,6 +6,7 @@ class Source(str,Enum):
     nhatot = "nhatot" #https://www.nhatot.com/
     houseviet = "houseviet" #https://houseviet.vn/
     bds123vn = "bds123vn" #https://bds123.vn/
+    muabannet = "muabannet" #https://muaban.net/
 
 class Response(BaseModel):
     title:str

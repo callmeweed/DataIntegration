@@ -17,14 +17,14 @@ class HousevietService(BaseService):
         city = ""
         district_HCM = ["quận 1", "quận 2", "quận 3", "quận 4", "quận 5", "quận 6", "quận 7", "quận 8", "quận 9",
                         "quận 10", "quận 11", "quận 12"]
-        if req.type == "Sell":
+        if req.type == "Bán":
             _type = "nha-dat-ban"
-        elif req.type == "Lease":
+        elif req.type == "Thuê":
             _type = "nha-dat-cho-thue"
 
-        if req.city == "Hanoi":
+        if req.city == "Hà Nội":
             city = "ha-noi"
-        elif req.city == "HCM":
+        elif req.city == "Hồ Chí Minh":
             city = "ho-chi-minh"
 
         if req.district == "All":
