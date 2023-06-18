@@ -118,6 +118,9 @@ class HousevietService(BaseService):
             if condition != []:
                 return results
 
+            if req.page == 5:
+                return results
+
             result = self.parser_html(soup)
             for i in result:
                 results.append(i)

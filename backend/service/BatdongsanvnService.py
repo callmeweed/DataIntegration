@@ -99,6 +99,8 @@ class BatdongsanvnService(BaseService):
             condition = soup.select('div.uk-panel > p')
             if condition != []:
                 return results
+            if req.page == 5:
+                return results
 
             result = self.parser_html(soup)
             for i in result:

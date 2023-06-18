@@ -1,0 +1,34 @@
+.nav {
+    height: 108px;
+    padding:25px 0px;
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    color: #444444;
+    padding: 0 20px;
+    min-height: 110px;
+    background-color: whitesmoke;
+    border-top: 10px solid rgb(161, 11, 11);
+    border-bottom: 5px;
+    box-shadow: 1px 6px 6px rgb(235, 43, 43);
+}
+
+.nav .nav-logo {
+    float: left;
+    height: 62px;
+    width: 62px;
+}
+.nav-logo > img {
+    float: left;
+    height: 62px;
+    width: auto;
+}
+.nav .nav-items {
+    float: left;
+}
+
+.nav .nav-item {
+    display: inline-block;
+    padding: 17px 24px;
+}

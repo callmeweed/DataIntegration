@@ -1,0 +1,220 @@
+
+::-webkit-scrollbar {
+    
+  width: 8px;
+  
+  height: 8px;
+
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background: #c2c9d2;
+}
+.eventsTitle{
+     
+      color: #444444;
+      font: Segoe UI;
+      font-size: 30px/32px;
+      margin-bottom: 8px;
+      margin-top: 23px;
+    }
+.source-element{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.element{
+  max-width: 24%;
+  min-width: 300px;
+}
+.filter-wrapper{
+  display: flex;
+  flex-direction: row;
+    width: 100%;
+    margin-left: 15px;
+    gap: 20px;
+    
+}
+.filter-type {
+  width: 15%;
+  min-width: 150px;
+}
+.filter-area {
+  width: 20%;
+  min-width: 100px;
+}
+.filter-district {
+  width: 20%;
+  min-width: 100px;
+}
+.filter-city {
+  width: 15%;
+  min-width: 12%;
+}
+.filter-text {
+  width: 12%;
+  min-width: 12%;
+}
+.wrapper-items{
+  border-radius: 10px;
+  border: 3px solid #333333;
+  align-items: center;
+  padding-left: 10px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  
+}
+.summaryItems{
+  overflow-y: scroll;
+      overflow-y:auto;
+      
+    
+     max-height: 400px;
+}
+.eventsItems{
+      
+      overflow-y: scroll;
+      overflow-y:auto;
+     height: 400px;
+     max-height: 400px;
+     border: #444444 1px;
+     margin-bottom: 10px;
+     padding-bottom: 20px;
+    
+    }
+.eventsItem-normal:hover{
+  cursor: pointer;
+}
+
+.eventsItem-normal{
+  display: flex;
+        flex-direction: row;
+        margin-top: 12px;
+        
+}
+.eventsIconItem {
+  margin: auto;
+  align-items: center;
+  background-color: #ffffff;
+}
+.eventsIconItem > img{
+  height: 40px;
+  width: 40px;
+  align-items: center;
+}
+.eventsItem{
+        display: flex;
+        flex-direction: row;
+        margin-top: 12px;
+        
+      }  
+      .eventsItemSource{
+        margin-top: 5px;
+        margin-left: 16px;
+        font-weight: bold;
+        color: #333333;
+      }
+      .eventsDate{
+        display: flex;
+        flex-direction: column;
+        background: #ffffff 0% 0% no-repeat padding-box;
+        border: 3px solid #d14a4a;
+        justify-content: center;
+        align-items: center;
+        width: 80px;
+        height: auto;
+        margin-right: 10px;
+        
+      }
+      .eventsDay{
+         
+        color: #d14a4a;
+        font: Segoe UI;
+        font-size: 26px/18px;
+        margin-bottom: 10px;
+      }
+      .eventsMonth{
+        color: #d14a4a;
+        font: Segoe UI;
+        font-size: 16px/18px;
+        text-align: center;
+     
+      }
+      .eventsContent{
+        display: flex;
+        flex-direction: column;
+        background: #f8f5f5 0% 0% no-repeat padding-box;
+        border-radius: 2px;
+        padding: 7px 0;
+        padding-right: 3px;
+        flex-grow: 1;
+        margin-right: 7px;
+      }
+      .eventsItemTitle-normal{
+        color: #333333;
+        font: Segoe UI;
+        font-size: 21px/25px;
+        font-weight: bold;
+      /*  @include textStyle(left, normal normal 600 16px/21px Segoe UI, 0px, #333333, 1);*/
+        padding-left: 5px;
+        
+        margin-left: 2px;
+       
+      }
+    
+      .eventsItemTitle-normal:hover{
+        color: #d14a4a;
+      }
+      .eventsItemTitle{
+        color: #333333;
+        font: Segoe UI;
+        font-size: 15px;
+        font-weight: bold;
+      /*  @include textStyle(left, normal normal 600 16px/21px Segoe UI, 0px, #333333, 1);*/
+        margin-top: 14px;
+        margin-left: 16px;
+      }
+      .eventsItemTitle:hover{
+        color: #d14a4a;
+      }
+      .eventsItemTime{
+        display: flex;
+        flex-direction: row;
+        margin-left: 16px;
+        margin-top: 5px;
+        
+        
+      }
+      .eventsIcon{
+        margin-right: 8px;
+        width: 20px;
+        height: 20px;
+      }
+      .eventsItemStartEnd{
+        color: #333333;
+    font: Segoe UI;
+    font-size: 13px;
+     
+    }
+.view-more:hover{
+  cursor: pointer;
+}
+    a:link {
+      color: #d14a4a;
+      text-decoration: none;
+    }
+    
+    /* visited link */
+    a:visited {
+      color: rgb(65, 65, 65);
+    }
+    
+    /* mouse over link */
+    a:hover {
+      color: #d14a4a;
+    }
+    
+    /* selected link */
+    a:active {
+      color: blue;
+    }
