@@ -15,6 +15,7 @@ class BatdongsanvnService(BaseService):
         url = None
         _type = ""
         city = ""
+        district_HCM = ["quận 1", "quận 2", "quận 3", "quận 4", "quận 5", "quận 6", "quận 7", "quận 8", "quận 9", "quận 10", "quận 11", "quận 12"]
         if req.type == "Sell":
             _type = "ban-nha-dat"
         elif req.type == "Lease":
@@ -29,6 +30,8 @@ class BatdongsanvnService(BaseService):
             url = f"https://batdongsan.vn/{_type}-{city}"
         else:
             district = str(req.district).lower().strip()
+            if district not in district_HCM:
+                district = district.replace("huyện ", "").replace("quận ", "").strip()
             normalized_district = unidecode(district).strip().replace(" ", "-")
             url = f"https://batdongsan.vn/{_type}-{normalized_district}-{city}"
 
