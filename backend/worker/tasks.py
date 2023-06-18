@@ -4,6 +4,7 @@ import sys
 import asyncio
 from service.factory import FACTORY
 from model.request import RequestSearch
+import os
 
 sys.path.append("..")
 
