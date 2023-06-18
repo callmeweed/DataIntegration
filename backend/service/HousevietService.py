@@ -15,6 +15,8 @@ class HousevietService(BaseService):
         url = None
         _type = ""
         city = ""
+        district_HCM = ["quận 1", "quận 2", "quận 3", "quận 4", "quận 5", "quận 6", "quận 7", "quận 8", "quận 9",
+                        "quận 10", "quận 11", "quận 12"]
         if req.type == "Sell":
             _type = "nha-dat-ban"
         elif req.type == "Lease":
@@ -29,8 +31,12 @@ class HousevietService(BaseService):
             url = f"https://houseviet.vn/{_type}-{city}"
         else:
             district = str(req.district).lower().strip()
+            if district not in district_HCM:
+                district = district.replace("huyện ", "").replace("quận ", "").strip()
             normalized_district = unidecode(district).strip().replace(" ", "-")
             url = f"https://houseviet.vn/{_type}-{normalized_district}"
+
+
 
         if req.area != "All":
             area = str(req.area).lower().strip()

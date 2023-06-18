@@ -1,0 +1,15 @@
+- Quận + tên
+- Huyện + tên
+
+Batdongsanvn + houseviet: Bỏ quận + huyện ở đầu để truy vấn ( Ba-Vi, Cau-giay, ...) done
+bds123 : Giữ nguyên quận, huyện: (quan-cau-giay, huyen-chuong-my)
+
+form call api
+{
+  "type": "Lease",
+  "city": "HCM",
+  "district": "Huyện Củ chi",
+  "area": "Dưới 30m2",
+  "text": "string",
+  "page": 1
+}
