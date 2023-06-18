@@ -7,8 +7,9 @@ class Settings(BaseSettings):
     Settings for the smart parking
     """
     list_webpage = [
-                    "batdongsanvn",
-                    "houseviet",
+                    # "batdongsanvn",
+                    # "houseviet",
+                    "bds123vn",
                     ]
     port:int=8000
     host:str="0.0.0.0"

@@ -4,13 +4,13 @@ from enum import Enum
 
 
 class Type(str, Enum):
-    Sell = "Sell"  # Bán
-    Lease = "Lease"  # Cho thuê
+    Sell = "Bán"  # Bán
+    Lease = "Thuê"  # Cho thuê
 
 
 class City(str, Enum):
-    Hanoi = "Hanoi"  # Hà Nội
-    HCM = "HCM"  # Hồ Chí Minh
+    Hanoi = "Hà Nội"  # Hà Nội
+    HCM = "Hồ Chí Minh"  # Hồ Chí Minh
 
 class RequestSearch(BaseModel):
     """
