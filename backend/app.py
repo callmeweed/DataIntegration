@@ -60,6 +60,18 @@ def search(req:RequestSearch):
         store_result[job_id]=result
     return {"result":final}
 
+
+@app.post("/search/{web}")
+async def search_one_web(req: RequestSearch, web: str):
+    engine = FACTORY[web]()
+    # result = tasks.run_session(req.dict(),web)
+    result = await engine.process(req)
+    return result
+
+@app.get("/list-web-pages")
+async def get_list_web_pages():
+    return settings.list_webpage
+
 @app.get(
     "/result/{task_id}"
 )
