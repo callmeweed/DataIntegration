@@ -105,7 +105,7 @@ class MuabannetService(BaseService):
 
     async def process(self, req: RequestSearch):
         results = []
-        req.page = 5
+        req.page = 3
 
         url = self.rewriteQuery(req)
         if url == None:

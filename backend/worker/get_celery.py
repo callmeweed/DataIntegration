@@ -39,7 +39,7 @@ def get_celery() -> Celery:
     return __celery
 
 
-def a_get_result(result, poll_interval=0.1):
+def a_get_result(result, poll_interval=0.5):
     """
     Periodically polls Celery for a job's result in an async manner.
     This helps reduce blocking IO when waiting for Celery in FastAPI, although not very effectively.
