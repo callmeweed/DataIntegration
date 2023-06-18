@@ -1,19 +1,21 @@
 .portal-homepage {
-    padding: 0px 43px;
-    width: 100%;
+  width: 100vw;
 }
 
 .portal-homepage .wrap,
 .portal-homepage .header,
 .portal-homepage .content {
-    width: 100%;
+  width: 100%;
 }
 
-.content{
-    display: flex;
-    flex-direction: row;
-    column-gap: 48px;
-    row-gap: 18px;
+.content {
+  /* display: flex;
+  flex-direction: row;
+  column-gap: 48px;
+  row-gap: 18px; */
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px;
 }
 /*
 .content-left {
@@ -25,7 +27,7 @@
 @media (min-width: 1200px) {
     .content {
         flex-direction: row;
-        
+
     }
     .content-left {
         width: calc(100% - 474px);
