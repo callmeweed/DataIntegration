@@ -4,5 +4,7 @@ import sys
 
 sys.path.append("..")
 
-FACTORY = {"batdongsanvn": BatdongsanvnService,
-           "houseviet": HousevietService}
+FACTORY = {
+            "batdongsanvn": BatdongsanvnService,
+            "houseviet": HousevietService
+           }

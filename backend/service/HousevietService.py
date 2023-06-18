@@ -9,45 +9,46 @@ import logging
 
 class HousevietService(BaseService):
     def __init__(self, ):
-        super(BatdongsanvnService, self).__init__()
+        super(HousevietService, self).__init__()
 
     def rewriteQuery(self,req:RequestSearch)-> str:
         url = None
+        _type = ""
+        city = ""
         if req.type == "Sell":
-            type = "nha-dat-ban"
+            _type = "nha-dat-ban"
         elif req.type == "Lease":
-            type = "nha-dat-cho-thue"
+            _type = "nha-dat-cho-thue"
 
         if req.city == "Hanoi":
             city = "ha-noi"
-            if req.district == "All":
-                url = f"https://batdongsan.vn/{type}-{city}"
-            else:
-                district = str(req.district).lower().strip()
-                normalized_district = unidecode(district).strip().replace(" ", "-")
-                url = f"https://batdongsan.vn/{type}-{city}-{normalized_district}"
         elif req.city == "HCM":
             city = "ho-chi-minh"
-            if req.district == "All":
-                url = f"https://batdongsan.vn/{type}-{city}"
-            else:
-                district = str(req.district).lower().strip()
-                normalized_district = unidecode(district).strip().replace(" ", "-")
-                url = f"https://batdongsan.vn/{type}-{city}-{normalized_district}"
+
+        if req.district == "All":
+            url = f"https://houseviet.vn/{_type}-{city}"
+        else:
+            district = str(req.district).lower().strip()
+            normalized_district = unidecode(district).strip().replace(" ", "-")
+            url = f"https://houseviet.vn/{_type}-{normalized_district}"
 
         if req.area != "All":
             area = str(req.area).lower().strip()
             normalized_area = unidecode(area).strip()
+            #Từ 80 - 100m2 -> từ 80 m2 đến 100m2
+            normalized_area = normalized_area.replace("-", "m2 den")
+            # print(normalized_area)
+            if normalized_area.find("m2"):
+                normalized_area = normalized_area.replace("m2", "-m2")
+                # print(normalized_area)
             normalized_area = re.sub(r'[^a-zA-Z0-9]+', '-', normalized_area.lower())
-            url = f"{url}-{normalized_area}"
+            # print(normalized_area)
+            url = f"{url}-dien-tich-{normalized_area}"
         else:
             pass
 
-
-
-
         if req.page > 1 and url != None:
-            url += "/p/" + str(req.page)
+            url += "/p" + str(req.page)
         print("url", url)
         return url
 
@@ -56,31 +57,40 @@ class HousevietService(BaseService):
         results = []
         try:
             # print(type(soup))
-            list_records = soup.find('div', 'uk-grid uk-grid-small uk-grid-width-1-1')
-            records = list_records.find_all('div', 'item')
+            list_records = soup.find('div', 'property')
+            records = list_records.find_all('section', 'property-item')
             for record in records:
-                title = record.find("div", class_='name').find("a")
+                title = record.find("div", class_='property-body').find("a")
 
                 link = title.get("href")
-                title = title.contents[0]
+                title = title.get("title")
 
-                date = record.find("div", class_='meta footer').find("span").find("time")
-                date = date.contents[0]
+                date = record.find("div", class_='property-time').find("span")
+                date = date.get("data-time")
+                #2 thumb bai vip
+                #//section[@class="property-item"]/.//img[@class="swiper-lazy swiper-lazy-loaded"]
+                #13 thumb bai bt
+                #//section[@class="property-item"]/.//figure[@class="rounded property-image"]/img/@src
 
-                thumbnail = record.find("div", class_='image cover').find("a")
-                thumbnail = thumbnail.get("href")
+                thumbnail = record.find("img", class_='swiper-lazy swiper-lazy-loaded')
+                if thumbnail is not None:
+                    thumbnail = thumbnail.get("src")
+                else:
+                    thumbnail = record.find("figure", class_='rounded property-image').find("img").get("data-src")
 
-                area = record.find("span", class_='acreage')
+
+
+                area = record.find("div", class_='property-area')
                 if area is not None:
                     area = area.contents[0]
 
 
-                price = record.find("span", class_='price')
+                price = record.find("span", class_='price-text')
                 price = price.contents[0]
                 price = re.sub(r'[\n\t]', '', price)
                 # print(date)
 
-                result = Response(title=title, link=link, date=date, thumbnail=thumbnail, area=area, price=price, source="batdongsanvn").dict()
+                result = Response(title=title, link=link, date=date, thumbnail=thumbnail, area=area, price=price, source="houseviet").dict()
                 results.append(result)
             return results
         except Exception as e:
@@ -89,40 +99,22 @@ class HousevietService(BaseService):
 
     async def process(self, req: RequestSearch):
         results = []
-        if req.text is None or req.text == "":
-
+        while True:
             url = self.rewriteQuery(req)
             if url == None:
                 return results
+
             soup = await self.asyncDoQuery(url)
             if soup == None:
                 raise HTTPException(404, "Not found, try again later")
-            results = self.parser_html(soup)
-            return results
-        else:
-            candidates = []
-            page = req.page
-            list_soup = []
-            for i in range((page - 1) * 5, page * 5):
-                if i == 0: continue
-                req.page = i
-                url = self.rewriteQuery(req)
-                if url == None:
-                    continue
-                fut = self.asyncDoQuery(url)
-                list_soup.append(fut)
-            temps = await asyncio.gather(*list_soup)
 
-            for temp in temps:
+            condition = soup.select('div.empty-content')
+            if condition != []:
+                return results
 
-                if temp == None:
-                    continue
-                else:
-                    candidates.append(temp)
-            for x in candidates:
-                # print(type(x))
-                results += self.parser_html(x)
-            # candidates = [ for x in candidates]
-            results = self.filterQuery(req.text, results)
+            result = self.parser_html(soup)
+            for i in result:
+                results.append(i)
 
-            return results
+            req.page += 1
+        return results
