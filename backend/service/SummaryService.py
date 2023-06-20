@@ -20,7 +20,12 @@ class SummaryService:
         list_str = []
         for obj in list_object:
             obj["title"] = obj["title"].lower()
-            dictionary[obj["title"].lower()] = obj
+            title = obj["title"]
+            if title not in dictionary.keys():
+                dictionary[title] = []    
+                dictionary[title].append(obj)
+            else:
+                dictionary[title].append(obj)
             list_str.append(obj["title"].lower())
         import numpy as np
         df = group_similar_strings(pd.Series(list_str))
@@ -36,10 +41,13 @@ class SummaryService:
                 res.append(row["group_rep"])
             results.append(res)
             # break
+        print("RESULTS:", results)
         final = []
         for gr in results:
             tmp = []
             for x in gr:
-                tmp.append(dictionary[x])
+                for t in dictionary[x]:
+                    tmp.append(t)
             final.append(tmp)
+        print("FINAL:", final)
         return final
