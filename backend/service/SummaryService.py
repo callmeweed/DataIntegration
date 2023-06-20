@@ -7,7 +7,7 @@ import numpy as np
 from string_grouper import match_strings, match_most_similar, \
     group_similar_strings, compute_pairwise_similarities, \
     StringGrouper
-
+from datetime import datetime, timedelta
 
 class SummaryService:
     def __init__(self, ):
@@ -16,9 +16,19 @@ class SummaryService:
     async def summary(self, list_object: list):  # [a,b,c,d,e] -> [[a],[b,c],[d,e]]
         ###
         ###
+        # Removing older data before 2021
+        new_obj_list = []
+        for obj in list_object:
+            date = datetime.strptime(obj['date'].split(' ')[1], '%d/%m/%Y')
+            dest_time = datetime.now() - timedelta(days=365)
+            if date < dest_time:
+                continue
+            new_obj_list.append(obj)
+
+        # Matching data
         dictionary = {}
         list_str = []
-        for obj in list_object:
+        for obj in obj:
             obj["title"] = obj["title"].lower()
             title = obj["title"]
             if title not in dictionary.keys():
@@ -41,7 +51,7 @@ class SummaryService:
                 res.append(row["group_rep"])
             results.append(res)
             # break
-        print("RESULTS:", results)
+        # print("RESULTS:", results)
         final = []
         for gr in results:
             tmp = []
@@ -49,5 +59,5 @@ class SummaryService:
                 for t in dictionary[x]:
                     tmp.append(t)
             final.append(tmp)
-        print("FINAL:", final)
+        # print("FINAL:", final)
         return final
